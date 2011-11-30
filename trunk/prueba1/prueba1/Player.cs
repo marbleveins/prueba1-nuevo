@@ -16,7 +16,7 @@ namespace prueba1
     {
 
         public AnimatedSprite Tex;
-        
+
         public Vector2 Pos;
         public string State;
         public float Gravity;

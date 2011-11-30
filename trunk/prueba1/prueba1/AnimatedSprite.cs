@@ -13,10 +13,10 @@ using Microsoft.Xna.Framework.Media;
 namespace prueba1
 {
 
-    public class AnimatedSprite 
+    public class AnimatedSprite
     {
         //la textura...
-        
+
         float timer = 0f; //mide el tiempo transcurrido
         float interval = 50f; //el tiempo que debe transcurrir para cambiar de frame.
         int currentFrame = 0;
@@ -34,56 +34,56 @@ namespace prueba1
             set { state = value; }
         }
         public Vector2 Position
-	    {
-	        get { return position; }
-	        set { position = value; }
-	    }
-	 
-	    public Vector2 Origin
-	    {
-	        get { return origin; }
-	        set { origin = value; }
-	    }
-	 
-	    public Texture2D Texture
-	    {
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        public Vector2 Origin
+        {
+            get { return origin; }
+            set { origin = value; }
+        }
+
+        public Texture2D Texture
+        {
             get { return spriteTexture; }
-	        set { spriteTexture = value; }
-	    }
-	 
-	    public Rectangle SourceRect
-	    {
-	        get { return sourceRect; }
-	        set { sourceRect = value; }
-	    }
-     
-  
+            set { spriteTexture = value; }
+        }
+
+        public Rectangle SourceRect
+        {
+            get { return sourceRect; }
+            set { sourceRect = value; }
+        }
+
+
         public AnimatedSprite(Texture2D texture, int currentFrame, int spriteWidth, int spriteHeight)
-	    {
-	        this.spriteTexture = texture;
-	        this.currentFrame = currentFrame;
-	        this.spriteWidth = spriteWidth;
-	        this.spriteHeight = spriteHeight;
-    	}
+        {
+            this.spriteTexture = texture;
+            this.currentFrame = currentFrame;
+            this.spriteWidth = spriteWidth;
+            this.spriteHeight = spriteHeight;
+        }
 
         public void HandleSpriteMovement(GameTime gametime)
         {
             //acá se determina cuál animacián hay que reproducir. se llama a una función para cada animación.
 
-            sourceRect = new Rectangle(currentFrame * spriteWidth, 0, spriteWidth, spriteHeight);
-            if(state== "Idle")
+            SourceRect = new Rectangle(currentFrame * spriteWidth, 0, spriteWidth, spriteHeight);
+            if (State == "Idle")
                 AnimateStand(gametime);
-            if (state == "Running")
+            if (State == "Running")
                 AnimateRun(gametime);
 
-            origin = new Vector2(sourceRect.Width / 2, sourceRect.Height);
+            Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height);
         }
 
         public void AnimateStand(GameTime gametime)
         {
             timer += (float)gametime.ElapsedGameTime.TotalMilliseconds; //cuánto tiempo pasó desde el último update.
             if (currentFrame > 1) { currentFrame = 0; }
-            if (timer > interval*8)
+            if (timer > interval * 8)
             {
                 currentFrame++;
                 if (currentFrame > 1)

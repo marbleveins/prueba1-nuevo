@@ -15,7 +15,7 @@ namespace prueba1
     public static class KeyInput
     {
         //private static int oldJumpAmount;
-        
+
         public static void Player(Player player)
         {
             //ECUACIONES M.R.U.V. REALES PARA APLICAR ALGUN DIA
@@ -24,31 +24,33 @@ namespace prueba1
             //player.Pos.X = player.Pos.X + (player.Velocity * (1 / 60)) + (player.Acceleration / 2) * 2.7f;
             //-------------------------------
             // SECCION DE MOVIMIENTO VERTICAL
-            
-            if(Keyboard.GetState().IsKeyDown(Keys.Up)&& player.jumpKeyPressed <2 && player.State!="Falling"){
-	            player.Gravity+=player.jump;
-                player.jumpKeyPressed=1;
- 
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && player.jumpKeyPressed < 2 && player.State != "Falling")
+            {
+                player.Gravity += player.jump;
+                player.jumpKeyPressed = 1;
+
             }
-            if(!Keyboard.GetState().IsKeyDown(Keys.Up) && player.jumpKeyPressed==1){
+            if (!Keyboard.GetState().IsKeyDown(Keys.Up) && player.jumpKeyPressed == 1)
+            {
                 player.jumpKeyPressed = 2;
             }
-            
-            
-                if (player.Gravity < 0)
-                {
-                    player.State = "Jumping";
-                }
-                if (player.Gravity > 0 )
-                {
-                    player.State = "Falling";
-                }
 
-                
+
+            if (player.Gravity < 0)
+            {
+                player.State = "Jumping";
+            }
+            if (player.Gravity > 0)
+            {
+                player.State = "Falling";
+            }
+
+
             player.jump *= player.jumpDecr;
             player.Pos.Y += (int)player.Gravity;
 
-            while (EstaPisando(player))
+            while (Collision.EstaColisionando(player.Pos, Game1.backgroundCollisionTex, Color.Black, 0, -1))
             {
                 player.State = "Idle";
                 player.Pos.Y--;
@@ -93,11 +95,6 @@ namespace prueba1
                 player.Pos.X = 4;
             if (player.Pos.X < 0)
                 player.Pos.X = 364;
-        }
-
-        private static bool EstaPisando(Player player)
-        {
-            return Collision.EstaColisionando(player.Pos, Game1.backgroundCollisionTex, Color.Black, 0, -1);
         }
     }
 }
