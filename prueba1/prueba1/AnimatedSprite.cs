@@ -96,16 +96,17 @@ namespace prueba1
         public void AnimateRun(GameTime gametime)
         {
             timer += (float)gametime.ElapsedGameTime.TotalMilliseconds; //cuánto tiempo pasó desde el último update.
-            if (currentFrame > 5 || currentFrame < 2) { currentFrame = 2; }
-            if (timer > interval * 3)
+            if (currentFrame > 9 || currentFrame < 2) { currentFrame = 2; }
+            if (timer > interval * 2)
             {
                 currentFrame++;
-                if (currentFrame > 5)
+                if (currentFrame > 9)
                 {
                     currentFrame = 2;
                 }
                 timer = 0f; //resetea el timer.
             }
         }
+
     }
 }
