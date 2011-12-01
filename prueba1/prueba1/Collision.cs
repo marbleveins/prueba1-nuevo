@@ -12,9 +12,9 @@ using Microsoft.Xna.Framework.Media;
 
 namespace prueba1
 {
-    public static class Collision
+    public class Collision
     {
-        public static bool EstaColisionando(Vector2 position, Texture2D texture, Color color, int addX, int addY)
+        public bool EstaColisionando(Vector2 position, Texture2D texture, Color color, int addX, int addY)
         {
             var textureDataBG = new Color[(texture.Width * texture.Height)];
             texture.GetData(textureDataBG);

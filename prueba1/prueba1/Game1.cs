@@ -23,6 +23,7 @@ namespace prueba1
         public static Texture2D backgroundViewTex;
         public static Texture2D backgroundCollisionTex;
         public static int scaleFactor = 2;
+        private KeyInput keyInput;
 
 
         private Player player;
@@ -86,7 +87,9 @@ namespace prueba1
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Tab))
                 player.Pos.X = 20;
-            KeyInput.Player(player);
+            //aca deberia hacer algo como player.(KeyInput.UsersWill()) y usersWill devolveria Jump, MoveRight, etc. (si es que se puede)
+            //sino if UsersWill == "Jump" then Player.Jump() o algo asi.
+            player.Move();
 
             player.Tex.State = player.State;
 
@@ -111,7 +114,7 @@ namespace prueba1
 
         private void DrawText()
         {//LO DEJO DE GUIA POR SI NECESITAMOS ESCRIBIR TEXTO :p
-            spriteBatch.DrawString(font, "State: " + player.State, new Vector2(10, (int)(screenHeight / 6)), Color.Red);
+            spriteBatch.DrawString(font, "State: " + player.State, new Vector2(10, 10), Color.Red);
         }
 
         private void DrawBackground()
