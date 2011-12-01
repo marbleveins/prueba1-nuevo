@@ -38,28 +38,28 @@ namespace prueba1
 
             graphics.PreferredBackBufferWidth = 184 * scaleFactor;
             graphics.PreferredBackBufferHeight = 145 * scaleFactor;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             graphics.ApplyChanges();
             Window.Title = "Prueba1";
 
             player = new Player
-            {
-                Pos = new Vector2(20, 20),
-                State = "Idle",
-                GravityForce = .5f,
-                Gravity = 0,
-                JumpForce = -2,
-                jumpDecr = .75f,
-                Velocity = 0,
-                MaxVelocity = 1,
-                Acceleration = 1,
-                jump = 0,
-                jumpKeyPressed = 0,
-                Tex = new AnimatedSprite(Content.Load<Texture2D>("playeranim"), 0, 16, 32),
+                         {
+                             Pos = new Vector2(20, 20),
+                             State = "Idle",
+                             GravityForce = .5f,
+                             Gravity = 0,
+                             JumpForce = -2,
+                             jumpDecr = .75f,
+                             Velocity = 0,
+                             MaxVelocity = 1,
+                             Acceleration = 1,
+                             jump = 0,
+                             jumpKeyPressed = 0,
+                             Tex = new AnimatedSprite(Content.Load<Texture2D>("playeranim"), 0, 16, 32),
 
 
-            };
+                         };
 
             base.Initialize();
         }

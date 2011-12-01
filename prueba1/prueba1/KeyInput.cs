@@ -25,13 +25,13 @@ namespace prueba1
             //-------------------------------
             // SECCION DE MOVIMIENTO VERTICAL
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && player.jumpKeyPressed < 2 && player.State != "Falling")
+            if (EstaPisando(player) && player.jumpKeyPressed < 2 && player.State != "Falling")
             {
                 player.Gravity += player.jump;
                 player.jumpKeyPressed = 1;
 
             }
-            if (!Keyboard.GetState().IsKeyDown(Keys.Up) && player.jumpKeyPressed == 1)
+            if (!EstaPisando(player) && player.jumpKeyPressed == 1)
             {
                 player.jumpKeyPressed = 2;
             }
@@ -48,9 +48,9 @@ namespace prueba1
 
 
             player.jump *= player.jumpDecr;
-            player.Pos.Y += (int)player.Gravity;
+            player.Pos.Y += (int) player.Gravity;
 
-            while (Collision.EstaColisionando(player.Pos, Game1.backgroundCollisionTex, Color.Black, 0, -1))
+            while (EstaPisando(player))
             {
                 player.State = "Idle";
                 player.Pos.Y--;
@@ -91,10 +91,16 @@ namespace prueba1
             player.Pos.X += player.Velocity;
             //---------------------------------
 
-            if (player.Pos.X > Game1.screenWidth)
-                player.Pos.X = 4;
+            if (player.Pos.X > Game1.screenWidth/Game1.scaleFactor)
+                player.Pos.X = 5;
             if (player.Pos.X < 0)
-                player.Pos.X = 364;
+                player.Pos.X = 180;
+        }
+
+
+        private static bool EstaPisando(Player player)
+        {
+            return Collision.EstaColisionando(player.Pos, Game1.backgroundCollisionTex, Color.Black, 0, -1);
         }
     }
 }
