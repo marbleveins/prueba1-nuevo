@@ -30,6 +30,10 @@ namespace prueba1
             {
                 return "MoveLeft";
             }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                return "CouchOrRoll";
+            }
 
             return "None";
         }
