@@ -21,13 +21,11 @@ namespace prueba1
         public string State;
         public float Gravity;
         public float GravityForce;
-        public float JumpForce;
         public float MaxVelocity;
         public float Velocity;
         public float Acceleration;
-        public float jump;
-        public float jumpDecr;
-        public float jumpKeyPressed;
+        public float JumpPower;
+        private int _jumpTimer = 0;
 
         public void None()
         {
@@ -46,72 +44,90 @@ namespace prueba1
         public void Move()//provisorio para guardar lo del keyinput.cs (Andando)
         {
             var collision = new Collision(); // así existe sólo mientras el metodo esta corriendo.
+            _jumpTimer -= 1;
+
             //ECUACIONES M.R.U.V. REALES PARA APLICAR ALGUN DIA
             //Xf = X0 + v * t + 1/2@ * t2
             //Vf = V0 + @ * t
             //player.Pos.X = player.Pos.X + (player.Velocity * (1 / 60)) + (player.Acceleration / 2) * 2.7f;
             //-------------------------------
+
             // SECCION DE MOVIMIENTO VERTICAL
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && jumpKeyPressed < 2 && State != "Falling")
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && Gravity == 0 && _jumpTimer < 1)
             {
-                Gravity += jump;
-                jumpKeyPressed = 1;
-
-            }
-            if (!Keyboard.GetState().IsKeyDown(Keys.Up) && jumpKeyPressed == 1)
-                jumpKeyPressed = 2;
-
-
-            if (Gravity < 0)
-            {
-                State = "Jumping";
-            }
-            if (Gravity > 0)
-            {
-                State = "Falling";
+                Gravity -= JumpPower;
+                State = "jumping";
             }
 
-
-            jump *= jumpDecr;
+            Gravity += GravityForce;
             Pos.Y += (int)Gravity;
 
-            while (collision.EstaColisionando(Pos, Game1.backgroundCollisionTex, Color.Black, 0, -1))
+            if (Gravity > 0)
             {
-                State = "Idle";
+                if (Gravity > GravityForce * 6 || !collision.EstaColisionando(Pos, Game1.backgroundCollisionTex, Color.Black, 0, (int)(MaxVelocity * 3)))
+                {
+                    State = "falling";
+                    _jumpTimer = 15;
+                }
+            }
+
+
+            while (collision.EstaColisionando(Pos, Game1.backgroundCollisionTex, Color.Black, 0, 0))
+            {
+                State = "idle";
                 Pos.Y--;
                 Gravity = 0;
-                State = "Idle";
-                jumpKeyPressed = 0;
-                jump = JumpForce;
-
             }
-            Gravity += GravityForce;
             //-------------------------------
 
             // SECCION DE MOVIMIENTO HORIZONTAL
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (State == "idle" || State == "running")
             {
-                State = "Running";
-                if (Velocity <= MaxVelocity)
-                    Velocity += Acceleration;
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    State = "running";
+                    if (Velocity <= MaxVelocity)
+                        Velocity += Acceleration;
+                    else
+                        Velocity = MaxVelocity;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    State = "running";
+                    if (Velocity >= -MaxVelocity)
+                        Velocity -= Acceleration;
+                    else
+                        Velocity = -MaxVelocity;
+                }
                 else
-                    Velocity = MaxVelocity;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                State = "Running";
-                if (Velocity >= -MaxVelocity)
-                    Velocity -= Acceleration;
-                else
-                    Velocity = -MaxVelocity;
+                {
+                    if (Velocity > Acceleration)
+                        Velocity -= Acceleration;
+                    else if (Velocity < -Acceleration)
+                        Velocity += Acceleration;
+                    else
+                    {
+                        Velocity = 0;
+                    }
+                }
+
             }
             else
             {
-                if (Velocity > 0)
-                    Velocity -= 1;
-                else if (Velocity < 0)
-                    Velocity += 1;
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    if (Velocity <= MaxVelocity)
+                        Velocity += Acceleration / 2;
+                    else
+                        Velocity = MaxVelocity;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    if (Velocity >= -MaxVelocity)
+                        Velocity -= Acceleration / 2;
+                    else
+                        Velocity = -MaxVelocity;
+                }
             }
 
             Pos.X += Velocity;
