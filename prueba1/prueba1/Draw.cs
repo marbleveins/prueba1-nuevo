@@ -21,7 +21,7 @@ namespace prueba1
 
         public void Player(SpriteBatch spriteBatch, Player player)
         {
-            spriteBatch.Draw(player.Tex.Texture, player.Pos, player.Tex.SourceRect, Color.White, 0f, player.Tex.Origin, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(player.Tex.Texture, player.Pos, player.Tex.SourceRect, Color.White, 0f, player.Tex.Origin, 1.0f, player.Flipping, 0);
         }
 
         public void Text(SpriteBatch spriteBatch, Player player, SpriteFont font)

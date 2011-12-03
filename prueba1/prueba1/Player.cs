@@ -26,6 +26,7 @@ namespace prueba1
         public float Acceleration;
         public float JumpPower;
         private int _jumpTimer = 0;
+        public SpriteEffects Flipping = SpriteEffects.None;
 
         public void None()
         {
@@ -86,6 +87,7 @@ namespace prueba1
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
                     State = "running";
+                    Flipping = SpriteEffects.None;
                     if (Velocity <= MaxVelocity)
                         Velocity += Acceleration;
                     else
@@ -94,6 +96,7 @@ namespace prueba1
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     State = "running";
+                    Flipping = SpriteEffects.FlipHorizontally;
                     if (Velocity >= -MaxVelocity)
                         Velocity -= Acceleration;
                     else
