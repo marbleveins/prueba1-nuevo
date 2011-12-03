@@ -41,7 +41,7 @@ namespace prueba1
         public void Jump()
         {
         }
-        public void Move()//provisorio para guardar lo del keyinput.cs (Andando)
+        public void MoveAtWill()//provisorio para guardar lo del keyinput.cs (Andando)
         {
             var collision = new Collision(); // así existe sólo mientras el metodo esta corriendo.
             _jumpTimer -= 1;

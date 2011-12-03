@@ -15,8 +15,8 @@ namespace prueba1
     {
 
         readonly GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        SpriteFont font;
+        private SpriteBatch SpriteBatch;
+        private SpriteFont font;
         private GraphicsDevice device;
         public static int screenWidth;
         public static int screenHeight;
@@ -24,6 +24,7 @@ namespace prueba1
         public static Texture2D backgroundCollisionTex;
         public static int scaleFactor = 2;
         private KeyInput keyInput;
+        private Draw draw;
 
 
         private Player player;
@@ -58,12 +59,13 @@ namespace prueba1
 
 
                          };
+            draw = new Draw();
 
             base.Initialize();
         }
         protected override void LoadContent()
         { // TODO: use this.Content to load your game content here
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
             device = graphics.GraphicsDevice;
 
@@ -86,7 +88,7 @@ namespace prueba1
                 player.Pos.X = 20;
             //aca deberia hacer algo como player.(KeyInput.UsersWill()) y usersWill devolveria Jump, MoveRight, etc. (si es que se puede)
             //sino if UsersWill == "Jump" then Player.Jump() o algo asi.
-            player.Move();
+            player.MoveAtWill();
 
             player.Tex.State = player.State;
 
@@ -99,32 +101,14 @@ namespace prueba1
             Matrix globalTransformation = Matrix.CreateScale(scaleFactor, scaleFactor, 1);
 
             globalTransformation.Translation = new Vector3((screenWidth - backgroundViewTex.Width * scaleFactor) / 2, (screenHeight - backgroundViewTex.Height * scaleFactor) / 2, 0);
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, globalTransformation);
+            SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, globalTransformation);
+            
+            draw.Background(SpriteBatch, backgroundViewTex);
+            draw.Player(SpriteBatch, player);
+            draw.Text(SpriteBatch, player, font);
 
-            DrawBackground();
-            DrawPlayer();
-            DrawText();
-
-            spriteBatch.End();
+            SpriteBatch.End();
             base.Draw(gameTime);
-        }
-
-        private void DrawText()
-        {//LO DEJO DE GUIA POR SI NECESITAMOS ESCRIBIR TEXTO :p
-            spriteBatch.DrawString(font, "State: " + player.State, new Vector2(10, 10), Color.Red);
-        }
-
-        private void DrawBackground()
-        {
-            Vector2 bgpos = new Vector2(0, 0);
-            //var screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight);
-            spriteBatch.Draw(backgroundViewTex, bgpos, Color.White);
-        }
-
-        private void DrawPlayer()
-        {
-            //spriteBatch.Draw(player.Tex.Texture, player.Pos, player.Tex.SourceRect, Color.White, 0f, player.Tex.Origin, 1.0f, SpriteEffects.None, 0);
-            spriteBatch.Draw(player.Tex.Texture, player.Pos, player.Tex.SourceRect, Color.White, 0f, player.Tex.Origin, 1.0f, SpriteEffects.None, 0);
         }
     }
 }

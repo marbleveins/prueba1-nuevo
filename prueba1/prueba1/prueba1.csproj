@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Collision.cs" />
+    <Compile Include="Draw.cs" />
     <Compile Include="KeyInput.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
