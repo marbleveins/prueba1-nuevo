@@ -71,9 +71,9 @@ namespace prueba1
             //acá se determina cuál animacián hay que reproducir. se llama a una función para cada animación.
 
             SourceRect = new Rectangle(currentFrame * spriteWidth, 0, spriteWidth, spriteHeight);
-            if (State == "Idle")
+            if (State == "idle")
                 AnimateStand(gametime);
-            if (State == "Running")
+            if (State == "running")
                 AnimateRun(gametime);
 
             Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height);
