@@ -73,7 +73,7 @@ namespace prueba1
 
             if (Gravity > 0)
             {
-                if (Gravity > GravityForce * (int)(MaxVelocity * 6) || !collision.EstaColisionando(Pos, MainClass.backgroundCollisionTex, Color.Black, 0, (int)(MaxVelocity * 3)))
+                if (Gravity > GravityForce * (int)(MaxVelocity * 10) || !collision.EstaColisionando(Pos, MainClass.backgroundCollisionTex, Color.Black, 0, (int)(MaxVelocity * 3)))
                 {//CAMBIO DE jumping A falling
                     State = "falling";
                     _jumpWaitTimer = 0;
@@ -123,15 +123,15 @@ namespace prueba1
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    MoveRight(2);
+                    MoveRight(3);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    MoveLeft(2);
+                    MoveLeft(3);
                 }
             }
 
-            Pos.X += Velocity;
+            Pos.X += (int)Velocity;
             //---------------------------------
 
             //TEMP- WRAP EN LAS PAREDES PARA PROBAR SIN ROMPERNOS LAS BOLAS
