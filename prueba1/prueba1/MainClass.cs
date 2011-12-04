@@ -46,13 +46,13 @@ namespace prueba1
 
             player = new Player
                          {
-                             Pos = new Vector2(20, 20),
+                             Pos = new Vector2(5, 20),
                              State = "falling",
                              JumpPower = 3f,
                              GravityForce = .15f,
                              Gravity = 0,
                              Velocity = 0,
-                             MaxVelocity = 1.4f,
+                             MaxVelocity = 1.6f,
                              Acceleration = .2f,
                              Tex = new AnimatedSprite(Content.Load<Texture2D>("playeranim"), 0, 16, 32),
 

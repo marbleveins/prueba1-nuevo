@@ -34,7 +34,6 @@ namespace prueba1
 
 
         public void Move()
-
         {   //ECUACIONES M.R.U.V. REALES PARA APLICAR ALGUN DIA
             //Xf = X0 + v * t + 1/2@ * t2
             //Vf = V0 + @ * t
@@ -61,7 +60,10 @@ namespace prueba1
             {
                 if (State != "falling")
                 {
-                    State = "jumping";
+                    if ((int)Velocity != 0)
+                        State = "jumping";
+                    else
+                        State = "idleJumping";
                     Jump();
                 }
                 _preparingJumpTimer = 0;
@@ -71,10 +73,19 @@ namespace prueba1
             Gravity += GravityForce;
             Pos.Y += (int)Gravity;
 
-            if (Gravity > 0)
+            if (State == "jumping" || State == "idleJumping" || State == "falling")
+            {
+                if (Gravity > -GravityForce * ((int)(MaxVelocity * 4)) && Gravity < GravityForce * ((int)(MaxVelocity * 4)))
+                {//CAMBIO DE jumping O idleJumping A midAir
+                    State = "midAir";
+                }
+            }
+
+
+            if (Gravity > GravityForce * ((int)(MaxVelocity * 4)))
             {
                 if (Gravity > GravityForce * (int)(MaxVelocity * 10) || !collision.EstaColisionando(Pos, MainClass.backgroundCollisionTex, Color.Black, 0, (int)(MaxVelocity * 3)))
-                {//CAMBIO DE jumping A falling
+                {//CAMBIO DE jumping O idleJumping A falling
                     State = "falling";
                     _jumpWaitTimer = 0;
                 }
@@ -83,7 +94,7 @@ namespace prueba1
 
             while (collision.EstaColisionando(Pos, MainClass.backgroundCollisionTex, Color.Black, 0, 0))
             {//PISANDO
-                if (State != "preparingForJump")
+                if (State != "preparingForJump" && State != "crouching")
                     State = "idle";
                 Pos.Y--;
                 Gravity = 0;
@@ -92,17 +103,28 @@ namespace prueba1
 
             // SECCION DE MOVIMIENTO HORIZONTAL
 
-            if (State == "idle" || State == "running")
+            if (State == "idle" || State == "running" || State == "crouching")
             {
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                    State = "crouching";
+                else
+                    State = "idle";
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    State = "running";
+                    if (State == "crouching")
+                        State = "rolling";
+                    else
+                        State = "running";
                     Flipping = SpriteEffects.None;
                     MoveRight();
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    State = "running";
+                    if (State == "crouching")
+                        State = "rolling";
+                    else
+                        State = "running";
                     Flipping = SpriteEffects.FlipHorizontally;
                     MoveLeft();
                 }
@@ -119,7 +141,18 @@ namespace prueba1
                 }
 
             }
-            if (State == "jumping" || State == "falling") //EN EL AIRE
+            if (State == "jumping" || State == "falling" || State == "midAir") //EN EL AIRE
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    MoveRight(3);
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    MoveLeft(3);
+                }
+            }
+            else if (State == "idleJumping")
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
