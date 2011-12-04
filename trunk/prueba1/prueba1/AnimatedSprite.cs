@@ -75,9 +75,11 @@ namespace prueba1
                 AnimateStand(gametime);
             if (State == "running")
                 AnimateRun(gametime);
-            if(State=="jumping")
+            if (State == "preparingForJump")
+                AnimatePreparingJump(gametime);
+            if (State == "jumping")
                 AnimateJump(gametime);
-            if(State=="falling")
+            if (State == "falling")
                 AnimateFall(gametime);
 
             Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height);
@@ -111,16 +113,22 @@ namespace prueba1
                 timer = 0f; //resetea el timer.
             }
         }
-        public void AnimateJump(GameTime gametime)
+        public void AnimatePreparingJump(GameTime gametime)
         {
             currentFrame = 10;
-        
+
         }
-        public void AnimateFall(GameTime gametime)
+        public void AnimateJump(GameTime gametime)
         {
             currentFrame = 11;
 
         }
+        public void AnimateFall(GameTime gametime)
+        {
+            currentFrame = 13;
+
+        }
+
 
     }
 }

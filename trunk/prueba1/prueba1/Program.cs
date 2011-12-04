@@ -10,7 +10,7 @@ namespace prueba1
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (MainClass game = new MainClass())
             {
                 game.Run();
             }
