@@ -14,9 +14,13 @@ namespace prueba1
 {
     public class Player
     {
-
+        //PRIVATE (INTERNAS DE LA CLASE)
+        private int _jumpWaitTimer = 0;
+        private const int JumpWaitMaxTime = 15;
+        private int _preparingJumpTimer = 0;
+        private const int PreparingJumpDuration = 10;
+        //PUBLIC (PROPIEDADES DEL OBJETO)
         public AnimatedSprite Tex;
-
         public Vector2 Pos;
         public string State;
         public float Gravity;
@@ -25,40 +29,39 @@ namespace prueba1
         public float Velocity;
         public float Acceleration;
         public float JumpPower;
-        private int _jumpTimer = 0;
         public SpriteEffects Flipping = SpriteEffects.None;
 
-        public void None()
-        {
-        }
-        public void MoveLeft()
-        {
-            // hay que ver si los nombres van a ser Step o Move, 
-            // porque no se si se ejecutaran una vez por frame.... etc.
-        }
-        public void MoveRight()
-        {
-        }
-        public void Jump()
-        {
-        }
-        public void MoveAtWill()//provisorio para guardar lo del keyinput.cs (Andando)
-        {
-            var collision = new Collision(); // así existe sólo mientras el metodo esta corriendo.
-            _jumpTimer -= 1;
 
-            //ECUACIONES M.R.U.V. REALES PARA APLICAR ALGUN DIA
+        public void Move()
+        {   //ECUACIONES M.R.U.V. REALES PARA APLICAR ALGUN DIA
             //Xf = X0 + v * t + 1/2@ * t2
             //Vf = V0 + @ * t
             //player.Pos.X = player.Pos.X + (player.Velocity * (1 / 60)) + (player.Acceleration / 2) * 2.7f;
             //-------------------------------
 
-            // SECCION DE MOVIMIENTO VERTICAL
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && Gravity == 0 && _jumpTimer < 1)
+            var collision = new Collision(); // así existe sólo mientras el metodo esta corriendo.
+            
+            if (_jumpWaitTimer < JumpWaitMaxTime)
+                _jumpWaitTimer++;
+
+            if (_preparingJumpTimer > 0)
+                _preparingJumpTimer++;
+
+            // SECCION DE MOVIMIENTO VERTICAL 
+            //SALTO
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && Gravity == 0 && _jumpWaitTimer >= JumpWaitMaxTime)
+                _preparingJumpTimer++;
+
+            if (_preparingJumpTimer >= PreparingJumpDuration)
             {
-                Gravity -= JumpPower;
-                State = "jumping";
+                if (State != "falling")
+                {
+                    State = "jumping";
+                    Jump();
+                }
+                _preparingJumpTimer = 0;
             }
+            //-------------------------------
 
             Gravity += GravityForce;
             Pos.Y += (int)Gravity;
@@ -66,18 +69,19 @@ namespace prueba1
             if (Gravity > 0)
             {
                 if (Gravity > GravityForce * 6 || !collision.EstaColisionando(Pos, Game1.backgroundCollisionTex, Color.Black, 0, (int)(MaxVelocity * 3)))
-                {
+                {//CAMBIO DE jumping A falling
                     State = "falling";
-                    _jumpTimer = 15;
+                    _jumpWaitTimer = 0;
                 }
             }
 
-
+            
             while (collision.EstaColisionando(Pos, Game1.backgroundCollisionTex, Color.Black, 0, 0))
-            {
+            {//PISANDO
                 State = "idle";
                 Pos.Y--;
                 Gravity = 0;
+                _jumpWaitTimer = JumpWaitMaxTime;
             }
             //-------------------------------
 
@@ -88,22 +92,16 @@ namespace prueba1
                 {
                     State = "running";
                     Flipping = SpriteEffects.None;
-                    if (Velocity <= MaxVelocity)
-                        Velocity += Acceleration;
-                    else
-                        Velocity = MaxVelocity;
+                    MoveRight();
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     State = "running";
                     Flipping = SpriteEffects.FlipHorizontally;
-                    if (Velocity >= -MaxVelocity)
-                        Velocity -= Acceleration;
-                    else
-                        Velocity = -MaxVelocity;
+                    MoveLeft();
                 }
                 else
-                {
+                {//FRENO AUTOMATICO
                     if (Velocity > Acceleration)
                         Velocity -= Acceleration;
                     else if (Velocity < -Acceleration)
@@ -115,31 +113,49 @@ namespace prueba1
                 }
 
             }
-            else
+            if (State == "jumping" || State == "falling") //EN EL AIRE
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    if (Velocity <= MaxVelocity)
-                        Velocity += Acceleration / 2;
-                    else
-                        Velocity = MaxVelocity;
+                    MoveRight(2);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    if (Velocity >= -MaxVelocity)
-                        Velocity -= Acceleration / 2;
-                    else
-                        Velocity = -MaxVelocity;
+                    MoveLeft(2);
                 }
             }
 
             Pos.X += Velocity;
             //---------------------------------
 
+            //TEMP- WRAP EN LAS PAREDES PARA PROBAR SIN ROMPERNOS LAS BOLAS
             if (Pos.X > Game1.screenWidth / Game1.scaleFactor)
                 Pos.X = 5;
             if (Pos.X < 0)
-                Pos.X = 180;
+                Pos.X = Game1.screenWidth / Game1.scaleFactor - 5;
+            //---------------------------------
         }
+
+        //SECCION DE METODOS PRIVADOS
+        private void Jump()
+        {
+            Gravity -= JumpPower;
+        }
+        private void MoveRight(int accReducer = 1)
+        {
+            if (Velocity <= MaxVelocity)
+                Velocity += Acceleration / accReducer;
+            else
+                Velocity = MaxVelocity;
+
+        }
+        private void MoveLeft(int accReducer = 1)
+        {
+            if (Velocity >= -MaxVelocity)
+                Velocity -= Acceleration / accReducer;
+            else
+                Velocity = -MaxVelocity;
+        }
+        //---------------------------------
     }
 }
