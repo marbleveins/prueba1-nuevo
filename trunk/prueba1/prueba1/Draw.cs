@@ -26,7 +26,7 @@ namespace prueba1
 
         public void Text(SpriteBatch spriteBatch, Player player, SpriteFont font)
         {
-            spriteBatch.DrawString(font, "State: " + player.State, new Vector2(10, 10), Color.Red);
+            spriteBatch.DrawString(font, player.State, new Vector2(10, 10), Color.Red);
         }
     }
 }
