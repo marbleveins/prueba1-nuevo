@@ -57,7 +57,7 @@ namespace prueba1
             set { sourceRect = value; }
         }
 
-
+        
         public AnimatedSprite(Texture2D texture, int currentFrame, int spriteWidth, int spriteHeight)
         {
             this.spriteTexture = texture;
@@ -68,7 +68,7 @@ namespace prueba1
 
         public void HandleSpriteMovement(GameTime gametime)
         {
-            //acá se determina cuál animacián hay que reproducir. se llama a una función para cada animación.
+            //acá se determina cuál animacián hay que reproducir. se llama a una función para cada anismación.
 
             SourceRect = new Rectangle(currentFrame * spriteWidth, 0, spriteWidth, spriteHeight);
             if (State == "idle")
@@ -77,10 +77,20 @@ namespace prueba1
                 AnimateRun(gametime);
             if (State == "preparingForJump")
                 AnimatePreparingJump(gametime);
-            if (State == "jumping")
-                AnimateJump(gametime);
+            if (State == "idleJumping")
+                AnimateIdleJump(gametime);
             if (State == "falling")
                 AnimateFall(gametime);
+            if (State == "midAir")
+                AnimateMidAir(gametime);
+            if(State=="jumping")
+                AnimateJump(gametime);
+            if(State=="runningMidAir")
+                AnimateRunMidAir(gametime);
+            if(State=="runFalling")
+                AnimateRunFall(gametime);
+            if(State=="crouching")
+                AnimateCrouch(gametime);
 
             Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height);
         }
@@ -118,7 +128,7 @@ namespace prueba1
             currentFrame = 10;
 
         }
-        public void AnimateJump(GameTime gametime)
+        public void AnimateIdleJump(GameTime gametime)
         {
             currentFrame = 11;
 
@@ -127,6 +137,39 @@ namespace prueba1
         {
             currentFrame = 13;
 
+        }
+        public void AnimateMidAir(GameTime gametime)
+        {
+            currentFrame = 12;
+        }
+        public void AnimateJump(GameTime gametime)
+        {
+            currentFrame = 14;
+        }
+        public void AnimateRunMidAir(GameTime gametime)
+        {
+            currentFrame = 15;
+        }
+        public void AnimateRunFall(GameTime gametime)
+        {
+            currentFrame = 16;
+        }
+        public void AnimateCrouch(GameTime gametime)
+        {
+            
+            timer += (float)gametime.ElapsedGameTime.TotalMilliseconds;
+            if (currentFrame != 10 && currentFrame != 17)
+            {
+                timer = 0;
+
+                currentFrame = 10;
+            }
+            if (timer > interval * 2)
+                {
+                    currentFrame = 17;
+                    timer = 0;
+                }
+            
         }
 
 

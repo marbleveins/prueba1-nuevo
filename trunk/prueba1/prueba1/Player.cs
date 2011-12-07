@@ -77,7 +77,10 @@ namespace prueba1
             {
                 if (Gravity > -GravityForce * ((int)(MaxVelocity * 4)) && Gravity < GravityForce * ((int)(MaxVelocity * 4)))
                 {//CAMBIO DE jumping O idleJumping A midAir
-                    State = "midAir";
+                    if ((int)Velocity != 0)
+                        State = "runningMidAir";
+                    else
+                        State = "midAir";
                 }
             }
 
@@ -86,7 +89,10 @@ namespace prueba1
             {
                 if (Gravity > GravityForce * (int)(MaxVelocity * 10) || !collision.EstaColisionando(Pos, MainClass.backgroundCollisionTex, Color.Black, 0, (int)(MaxVelocity * 3)))
                 {//CAMBIO DE jumping O idleJumping A falling
-                    State = "falling";
+                    if ((int)Velocity != 0)
+                        State = "runFalling";
+                    else
+                        State = "falling";
                     _jumpWaitTimer = 0;
                 }
             }
@@ -141,7 +147,7 @@ namespace prueba1
                 }
 
             }
-            if (State == "jumping" || State == "falling" || State == "midAir") //EN EL AIRE
+            if (State=="idleJumping" || State == "runningMidAir" || State == "runFalling" || State == "jumping" || State == "falling" || State == "midAir") //EN EL AIRE
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
@@ -152,17 +158,8 @@ namespace prueba1
                     MoveLeft(3);
                 }
             }
-            else if (State == "idleJumping")
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                {
-                    MoveRight(3);
-                }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                {
-                    MoveLeft(3);
-                }
-            }
+            
+            
 
             Pos.X += (int)Velocity;
             //---------------------------------
