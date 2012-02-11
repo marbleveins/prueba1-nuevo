@@ -52,7 +52,7 @@ namespace prueba1
                              GravityForce = .15f,
                              Gravity = 0,
                              Velocity = 0,
-                             MaxVelocity = 1.6f,
+                             MaxVelocity = 1f,
                              Acceleration = .2f,
                              Tex = new AnimatedSprite(Content.Load<Texture2D>("playeranim"), 0, 16, 32),
 
@@ -85,7 +85,7 @@ namespace prueba1
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Tab))
                 player.Pos.X = 20;
-            player.Move();
+            player.MoveNew();
 
             player.Tex.State = player.State;
 
